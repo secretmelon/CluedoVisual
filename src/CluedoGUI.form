@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="CluedoGUI">
+  <grid id="27dc6" binding="panel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+    <constraints>
+      <xy x="20" y="20" width="750" height="619"/>
+    </constraints>
+    <properties>
+      <background color="-13619152"/>
+      <enabled value="false"/>
+    </properties>
+    <border type="none" title="Cluedo Game"/>
+    <children>
+      <component id="c4fec" class="javax.swing.JButton" binding="suggestionButton">
+        <constraints/>
+        <properties>
+          <text value="Suggestion"/>
+        </properties>
+      </component>
+      <component id="d3c61" class="javax.swing.JButton" binding="assumptionButton">
+        <constraints/>
+        <properties>
+          <text value="Assumption"/>
+        </properties>
+      </component>
+      <component id="fa" class="javax.swing.JButton" binding="exitButton">
+        <constraints/>
+        <properties>
+          <text value="Exit (if in room)"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>
