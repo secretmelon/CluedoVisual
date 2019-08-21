@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -109,6 +110,8 @@ public class CluedoTextGame {
             System.out.println("You must enter a number between 3-6.");
             new CluedoTextGame(s);
         } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -370,8 +373,8 @@ public class CluedoTextGame {
      * main class to the program
      * where to execute the code
      */
-    /*public static void main(String[] arg) {
+    public static void main(String[] arg) {
         Scanner s = new Scanner(System.in);
         new CluedoTextGame(s);
-    }*/
+    }
 }

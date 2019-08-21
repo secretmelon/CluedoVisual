@@ -1,105 +1,62 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 /**
- * The CluedoGUI is responsible for managing the GUI and it technically the front end of the game
+ * The CluedoVisualGame is responsible for managing the GUI and it technically the front end of the game
  *
  * @author Joshua Richards 300402562 | Melina Ariyani 300407485
  */
-public class CluedoGUI extends JFrame implements KeyListener {
-    private JPanel panel;
-    private JButton suggestionButton;
-    private JButton assumptionButton;
-    private JButton exitButton;
-
+public class CluedoVisualGame extends GUI {
 
     private ArrayList<Board.Cards> solution = new ArrayList<>(); //list of the solution to the game
     private boolean foundSolution = false;
     private static final int END_TURN = 12;
     private int numPlayers;
-    private int keyPressed;
     private Board b;
     private Player p;
     private int numMovesLeft;
 
-    public CluedoGUI() {
-        setNumPlayers();
-        add(panel);
-        setTitle("Cluedo Game");
-        setSize(500, 500);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        suggestionButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                suggestionAction(b, p);
-                numMovesLeft = numMovesLeft-END_TURN;
-            }
-        });
-        assumptionButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                accusationAction(b, p);
-                numMovesLeft = numMovesLeft-END_TURN;
-            }
-        });
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                exitAction(b, p);
-                numMovesLeft--;
-            }
-        });
 
+
+    public CluedoVisualGame() throws IOException {
+        setNumPlayers(); // sets the number of the players in the game
+        setSolution(); // randomly sets solution for the game
+        gameLoop();
+    }
+
+    private boolean board = false;
+
+    public void gameLoop() {
         try {
-            setSolution(); // randomly sets solution for the game
             b = new Board(numPlayers, solution, "board.txt"); // creates a new board
-
-            /*--------------------------------*/
-            /*         MAIN GAME LOOP         */
-            /*--------------------------------*/
+            board = true;
+            /*--------------------------------
+                     MAIN GAME LOOP
+            --------------------------------*/
 
             for (int player = 0; player < numPlayers; player++) {
                 p = b.getPlayers().get(player);
                 if (p.isOutOfGame()) continue;
-                b.printBoard();
                 System.out.println();
 
                 //Rolling dice
                 int movesLeft = diceRoll(12, 2);
-                JOptionPane.showMessageDialog(null, p.getName() + "'s " + "(Player " + (b.getPlayers().indexOf(p) + 1));
+                JOptionPane.showMessageDialog(null, p.getName() + "'s " + "(Player " + (b.getPlayers().indexOf(p) + 1) + ")");
                 numMovesLeft = movesLeft;
                 //Iterates through every move that is left.
-                for (int i = 0; i < movesLeft; i++) {
-                    System.out.println("Your Choices:");
-                    System.out.println();
-
+                while(numMovesLeft > 0){
+                    redraw();
                     //Player enters room
-                    if (p.isInRoom())
-                        System.out.println("((((((((You are in the " + p.getRoom().toString() + "))))))))");
-                    if (p.isInRoom()) System.out.println("You can make a SUGGESTION, ACCUSATION or EXIT");
-                    else System.out.println("You have " + numMovesLeft + " moves left.");
-
-                    //Prompting player to make a choice
-                    System.out.println("What do you want to do?");
-                    int num = 1;//playerInput(b, p, s);
-
+                    System.out.println(numMovesLeft);
+                    if (p.isInRoom()) JOptionPane.showMessageDialog(null, "You are in the " + p.getRoom().toString());
                     if (foundSolution) break;
                     if (p.isOutOfGame()) break;
-
-                    //If player view options etc. ensures not to decrement moves left
-                    if (num == 0) i = i - 1;
-
-                    numMovesLeft = numMovesLeft - num;
-                    if (numMovesLeft <= 0) {
-                        i = +END_TURN;
-                    }
-                    if (num != 0) b.printBoard();
                 }
 
                 //Check to see if game has been won
@@ -110,14 +67,31 @@ public class CluedoGUI extends JFrame implements KeyListener {
                 if (player == numPlayers - 1) player = -1;
             }
 
-            /*--------------------------------*/
-            /*            GAME OVER           */
-            /*--------------------------------*/
-            System.out.println("******** G A M E   O V E R ******** \n");
+            /*--------------------------------
+                        GAME OVER
+            --------------------------------*/
+            JOptionPane.showMessageDialog(null, "******** G A M E   O V E R ******** \n");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void redraw(Graphics g) {
+        if (!board)return;
+        b.printBoard(g);
+    }
+
+    @Override
+    protected void onMove(String move) {
+        if (move.equals("SUGGESTION")) suggestionAction();
+        else if (move.equals("ACCUSATION")) accusationAction();
+        else if (move.equals("EXIT")) exitAction();
+        else if (move.equals("LEFT")) leftAction();
+        else if (move.equals("RIGHT")) rightAction();
+        else if (move.equals("UP")) upAction();
+        else if (move.equals("DOWN")) downAction();
     }
 
     /**
@@ -199,18 +173,16 @@ public class CluedoGUI extends JFrame implements KeyListener {
     /**
      *
      *
-     * @param board
-     * @param player
      * @return
      */
-    public int exitAction(Board board, Player player) {
-        if (player.isInRoom()) {
-            Position oldPos = board.getPositions()[player.getPosition().getRow()][player.getPosition().getCol()];
-            if (board.isMoveValid("EXIT", player)) {
-                Position newPos = player.getRoom().getDoors().get(0);
+    public int exitAction() {
+        if (p.isInRoom()) {
+            Position oldPos = b.getPositions()[p.getPosition().getRow()][p.getPosition().getCol()];
+            if (b.isMoveValid("EXIT", p)) {
+                Position newPos = p.getRoom().getDoors().get(0);
                 System.out.println(oldPos);
                 System.out.println(newPos);
-                board.move(oldPos, newPos, player);
+                b.move(oldPos, newPos, p);
                 return 1;
             } else {
                 return 999;
@@ -223,32 +195,30 @@ public class CluedoGUI extends JFrame implements KeyListener {
     /**
      *
      *
-     * @param board
-     * @param player
      * @return
      */
-    public int suggestionAction(Board board, Player player) {
-        if (player.isInRoom()) {
+    public int suggestionAction() {
+        if (p.isInRoom()) {
             String suggestion = JOptionPane.showInputDialog("List the Player and Weapon you are suggesting were part of the murder with no spaces e.g. (mrswhite dagger)");
             String[] suggestionArray = suggestion.split(" ");
             String characterAccusation = suggestionArray[0];
-            String roomAccusation = player.getRoom().toString().toUpperCase();
+            String roomAccusation = p.getRoom().toString().toUpperCase();
             String weaponAccusation = suggestionArray[1];
             boolean provenWrong = false;
             for (int i = 0; i < numPlayers; i++) {
-                if (board.getPlayers().get(i).toString().equals(player.toString())) continue;
-                ArrayList<Board.Cards> hand = board.getPlayers().get(i).getHand();
+                if (b.getPlayers().get(i).toString().equals(p.toString())) continue;
+                ArrayList<Board.Cards> hand = b.getPlayers().get(i).getHand();
                 for (int j = 0; j < hand.size(); j++) {
                     if (characterAccusation.equals(hand.get(j).toString().toUpperCase()) ||
                             roomAccusation.equals(hand.get(j).toString().toUpperCase()) ||
                             weaponAccusation.equals(hand.get(j).toString().toUpperCase())) {
-                        JOptionPane.showMessageDialog(null, hand.get(j).toString() + " card is in the hands of " + board.getPlayers().get(i).toString());
+                        JOptionPane.showMessageDialog(null, hand.get(j).toString() + " card is in the hands of " + b.getPlayers().get(i).toString());
                         provenWrong = true;
                         i = j = 999;
                     }
                 }
                 if (!provenWrong)
-                    JOptionPane.showMessageDialog(null, board.getPlayers().get(i).toString() + " doesn't have any of these cards");
+                    JOptionPane.showMessageDialog(null, b.getPlayers().get(i).toString() + " doesn't have any of these cards");
             }
             if (!provenWrong) JOptionPane.showMessageDialog(null, "No players have cards of your suggestion");
             System.out.println();
@@ -261,12 +231,10 @@ public class CluedoGUI extends JFrame implements KeyListener {
     /**
      *
      *
-     * @param board
-     * @param player
      * @return
      */
-    public int accusationAction(Board board, Player player) {
-        if (player.isInRoom()) {
+    public int accusationAction() {
+        if (p.isInRoom()) {
             String suggestion = JOptionPane.showInputDialog("List the Player, Weapon and Room you are Accusing were part of the murder with no spaces in the names e.g. (mrswhite diningroom dagger)");
             String[] suggestionArray = suggestion.split(" ");
             String characterAccusation = suggestionArray[0];
@@ -276,10 +244,10 @@ public class CluedoGUI extends JFrame implements KeyListener {
                     roomAccusation.equals(solution.get(1).name().toUpperCase()) && // if room is correct
                     weaponAccusation.equals(solution.get(2).name().toUpperCase())) { // if weapon is correct
                 foundSolution = true;
-                JOptionPane.showMessageDialog(null, player.getName() + " was correct!");
+                JOptionPane.showMessageDialog(null, p.getName() + " was correct!");
             } else {
-                player.setIsOutOfGame(true);
-                JOptionPane.showMessageDialog(null, "Unfortunately your accusation was incorrect and you (" + player.getName() + ") are now out of the game");
+                p.setIsOutOfGame(true);
+                JOptionPane.showMessageDialog(null, "Unfortunately your accusation was incorrect and you (" + p.getName() + ") are now out of the game");
             }
             return END_TURN;
         } else {
@@ -306,37 +274,10 @@ public class CluedoGUI extends JFrame implements KeyListener {
     }
 
     /**
-     *
-     *
-     * @param event
-     */
-    @Override
-    public void keyTyped(KeyEvent event) {
-        if (event.getKeyCode() == KeyEvent.VK_LEFT) { // if player pressed the left arrow key
-            leftAction();
-            numMovesLeft--;
-        } else if (event.getKeyCode() == KeyEvent.VK_RIGHT) { // if player pressed the right arrow key
-            rightAction();
-            numMovesLeft--;
-        } else if (event.getKeyCode() == KeyEvent.VK_UP) { // if player pressed the up arrow key
-            upAction();
-            numMovesLeft--;
-        } else if (event.getKeyCode() == KeyEvent.VK_DOWN) { // if player pressed the down arrow key
-            downAction();
-            numMovesLeft--;
-        } else {
-        }
-    }
-
-    @Override public void keyPressed(KeyEvent e) { }
-    @Override public void keyReleased(KeyEvent e) { }
-
-    /**
      * main class to the program
      * where to execute the code
      */
-    public static void main(String[] arg) {
-        CluedoGUI gui = new CluedoGUI();
-        gui.setVisible(true);
+    public static void main(String[] arg) throws IOException {
+        new CluedoVisualGame();
     }
 }

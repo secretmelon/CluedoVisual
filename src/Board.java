@@ -1,3 +1,7 @@
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -21,6 +25,29 @@ public class Board {
     private static final int NUM_WEAPONS = 6;               //Number of weapons
     private int numPlayers; // the number of players
 
+    private final BufferedImage BallroomIcon = ImageIO.read(new File("Images\\Ball.png"));
+    private final BufferedImage BilliardIcon = ImageIO.read(new File("Images\\Billiard.png"));
+    private final BufferedImage CandleStickIcon = ImageIO.read(new File("Images\\Candle Stick.png"));
+    private final BufferedImage ConservatoryIcon = ImageIO.read(new File("Images\\Conservatory.png"));
+    private final BufferedImage DaggerIcon = ImageIO.read(new File("Images\\Dagger.png"));
+    private final BufferedImage MrGreenIcon = ImageIO.read(new File("Images\\Green.png"));
+    private final BufferedImage HallIcon = ImageIO.read(new File("Images\\Hall.png"));
+    private final BufferedImage KitchenIcon = ImageIO.read(new File("Images\\Kitchen Floor.png"));
+    private final BufferedImage DiningRoomIcon = ImageIO.read(new File("Images\\Layer 2.png"));
+    private final BufferedImage LeadpipeIcon = ImageIO.read(new File("Images\\Lead Pipe.png"));
+    private final BufferedImage LibraryIcon = ImageIO.read(new File("Images\\Library.png"));
+    private final BufferedImage MainFloorIcon = ImageIO.read(new File("Images\\Main Floor.png"));
+    private final BufferedImage ColMustardIcon = ImageIO.read(new File("Images\\Mustard.png"));
+    private final BufferedImage MrsPeacockIcon = ImageIO.read(new File("Images\\Peacock.png"));
+    private final BufferedImage ProfPlumIcon = ImageIO.read(new File("Images\\Plum.png"));
+    private final BufferedImage RevolverIcon = ImageIO.read(new File("Images\\Revolver.png"));
+    private final BufferedImage RopeIcon = ImageIO.read(new File("Images\\Rope.png"));
+    private final BufferedImage MissScarlettIcon = ImageIO.read(new File("Images\\Scarlett.png"));
+    private final BufferedImage SpannerIcon = ImageIO.read(new File("Images\\Spanner.png"));
+    private final BufferedImage StudyIcon = ImageIO.read(new File("Images\\Study.png"));
+    private final BufferedImage WallIcon = ImageIO.read(new File("Images\\Wall.png"));
+    private final BufferedImage MrsWhiteIcon = ImageIO.read(new File("Images\\White.png"));
+
     /**
      * All the cards in the game.
      */
@@ -34,7 +61,7 @@ public class Board {
      * @param numPlayers
      * @param fileName
      */
-    public Board(int numPlayers, ArrayList<Cards> solution, String fileName) {
+    public Board(int numPlayers, ArrayList<Cards> solution, String fileName) throws IOException {
 
         /*--------------------------------*/
         /*         CREATING BOARD         */
@@ -159,6 +186,53 @@ public class Board {
         }
     }
 
+
+    /**
+     * prints out an ASCII representation of what the board currently looks like
+     */
+    public void printBoard(Graphics g) {
+        for (int j = 0; j < ROWS; j++) {
+            for (int i = 0; i < COLUMNS; i++) {
+                char c = positions[j][i].getCharValue();
+
+                if (c == '#') g.drawImage(WallIcon, i*32, j*32, null);
+                else if (c == '-') g.drawImage(MainFloorIcon, i*32, j*32, null);
+                else if (c == '1') g.drawImage(MissScarlettIcon, i*32, j*32, null);
+                else if (c == '2') g.drawImage(ProfPlumIcon, i*32, j*32, null);
+                else if (c == '3') g.drawImage(ColMustardIcon, i*32, j*32, null);
+                else if (c == '4') g.drawImage(MrsPeacockIcon, i*32, j*32, null);
+                else if (c == '5') g.drawImage(MrGreenIcon, i*32, j*32, null);
+                else if (c == '6') g.drawImage(MrsWhiteIcon, i*32, j*32, null);
+
+                else if (c == 'B') g.drawImage(WallIcon, i*32, j*32, null);
+                else if (c == 'b') g.drawImage(BallroomIcon, i*32, j*32, null);
+                else if (c == 'C') g.drawImage(WallIcon, i*32, j*32, null);
+                else if (c == 'c') g.drawImage(ConservatoryIcon, i*32, j*32, null);
+                else if (c == 'I') g.drawImage(WallIcon, i*32, j*32, null);
+                else if (c == 'i') g.drawImage(BilliardIcon, i*32, j*32, null);
+                else if (c == 'L') g.drawImage(WallIcon, i*32, j*32, null);
+                else if (c == 'l') g.drawImage(LibraryIcon, i*32, j*32, null);
+                else if (c == 'S') g.drawImage(WallIcon, i*32, j*32, null);
+                else if (c == 's') g.drawImage(StudyIcon, i*32, j*32, null);
+                else if (c == 'H') g.drawImage(WallIcon, i*32, j*32, null);
+                else if (c == 'h') g.drawImage(HallIcon, i*32, j*32, null);
+                else if (c == 'G') g.drawImage(WallIcon, i*32, j*32, null);
+                else if (c == 'g') g.drawImage(StudyIcon, i*32, j*32, null);
+                else if (c == 'D') g.drawImage(WallIcon, i*32, j*32, null);
+                else if (c == 'd') g.drawImage(DiningRoomIcon, i*32, j*32, null);
+                else if (c == 'K') g.drawImage(WallIcon, i*32, j*32, null);
+                else if (c == 'k') g.drawImage(KitchenIcon, i*32, j*32, null);
+                else if (c == 'k') g.drawImage(KitchenIcon, i*32, j*32, null);
+
+                else if (c == '|') g.drawImage(CandleStickIcon, i*32, j*32, null);
+                else if (c == '+') g.drawImage(DaggerIcon, i*32, j*32, null);
+                else if (c == '!') g.drawImage(LeadpipeIcon, i*32, j*32, null);
+                else if (c == '*') g.drawImage(RevolverIcon, i*32, j*32, null);
+                else if (c == '%') g.drawImage(RopeIcon, i*32, j*32, null);
+                else if (c == '^') g.drawImage(SpannerIcon, i*32, j*32, null);
+            }
+        }
+    }
 
     /**
      * prints out an ASCII representation of what the board currently looks like
@@ -314,7 +388,7 @@ public class Board {
             } else if (positions[p.getRow()][p.getCol()-1].getCharValue() == '-') {
                 newPos = positions[p.getRow()][p.getCol()-1];
             } else {
-                System.out.println("Sorry you cant exit this room as all the entrances are blocked");
+                //Cant exit room as its blocked
                 return;
             }
 
@@ -324,6 +398,7 @@ public class Board {
             positions[oldPosition.getRow()][oldPosition.getCol()].setItem(null);
             positions[oldPosition.getRow()][oldPosition.getCol()].setCharValue(item.getRoom().getLetter().toString().charAt(0));
             item.setPosition(newPos);
+            item.setInRoom(false);
             item.setInRoom(false);
             item.setRoom(null);
         }
