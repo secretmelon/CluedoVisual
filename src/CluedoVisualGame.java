@@ -1,9 +1,12 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -24,10 +27,10 @@ public class CluedoVisualGame extends GUI {
     private int numMovesLeft;
 
 
-
     public CluedoVisualGame() throws IOException {
         setNumPlayers(); // sets the number of the players in the game
         setSolution(); // randomly sets solution for the game
+        System.out.println(solution);
         gameLoop();
     }
 
@@ -51,16 +54,24 @@ public class CluedoVisualGame extends GUI {
                 int movesLeft = diceRoll(12, 2);
                 JOptionPane.showMessageDialog(null, p.getName() + "'s " + "(Player " + (b.getPlayers().indexOf(p) + 1) + ")");
                 numMovesLeft = movesLeft;
+                System.out.println(movesLeft);
                 //Iterates through every move that is left.
+                boolean bool = true;
                 while(numMovesLeft > 0){
                     redraw();
                     //Player enters room
-                    System.out.println(numMovesLeft);
-                    if (p.isInRoom()) JOptionPane.showMessageDialog(null, "You are in the " + p.getRoom().toString());
-                    if (foundSolution) break;
+                    //System.out.println(numMovesLeft);
+                    if (p.isInRoom() && bool) {
+                        System.out.println(p.getRoom());
+                        JOptionPane.showMessageDialog(null, "You are in the " + p.getRoom().toString());
+                        bool = false;
+                    }
+                    if (foundSolution) {
+                        numPlayers--;
+                        break;
+                    }
                     if (p.isOutOfGame()) break;
                 }
-
                 //Check to see if game has been won
                 if (foundSolution) break;
 
@@ -80,28 +91,69 @@ public class CluedoVisualGame extends GUI {
     }
 
     @Override
-    protected void redraw(Graphics g) {
+    protected void redraw(Graphics g) throws IOException {
+        g.setColor(Color.darkGray);
+        g.fillRect(0,0,9999,9999);
         if (!board)return;
         backBoard.printBoard(g);
         b.printBoard(g);
+        //add in dice pic
+        g.setColor(Color.cyan);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+        g.drawString(Integer.toString(numMovesLeft), 100, (25*32)+65);
+        printCards(g);
+    }
+
+    private void printCards(Graphics g) throws IOException {
+        ArrayList<Board.Cards> hand = p.getHand();
+        for (int i = 0; i < p.getHand().size(); i++) {
+            BufferedImage card = ImageIO.read(new File("Images\\Cards\\" + p.getHand().get(i) + ".png"));
+            g.drawImage(card, (200+((70*i) + 10)), (25*32)+10, null);
+        }
+
     }
 
     @Override
     protected void onMove(String move) {
-        if (move.equals("SUGGESTION")) suggestionAction();
-        else if (move.equals("ACCUSATION")) accusationAction();
-        else if (move.equals("EXIT")) exitAction();
-        else if (move.equals("LEFT")) leftAction();
-        else if (move.equals("RIGHT")) rightAction();
-        else if (move.equals("UP")) upAction();
-        else if (move.equals("DOWN")) downAction();
+        if (move.equals("SUGGESTION")) {
+            suggestionAction();
+        }
+        else if (move.equals("ACCUSATION")) {
+            accusationAction();
+        }
+        else if (move.equals("EXIT")) {
+            exitAction();
+            numMovesLeft--;
+            System.out.println(numMovesLeft);
+        } else if (move.equals("END")) {
+            numMovesLeft = 0;
+        } else if (move.equals("LEFT")) {
+            leftAction();
+            numMovesLeft--;
+            System.out.println(numMovesLeft);
+        }
+        else if (move.equals("RIGHT")) {
+            rightAction();
+            numMovesLeft--;
+            System.out.println(numMovesLeft);
+        }
+        else if (move.equals("UP")) {
+            upAction();
+            numMovesLeft--;
+            System.out.println(numMovesLeft);
+        }
+        else if (move.equals("DOWN")) {
+            downAction();
+            numMovesLeft--;
+            System.out.println(numMovesLeft);
+        }
     }
 
     /**
      *
      *
      */
-    public void setNumPlayers() {
+    private void setNumPlayers() {
         String numPlayersString = JOptionPane.showInputDialog("How many players? (3-6)");
         numPlayers = Integer.parseInt(numPlayersString);
         //Making sure there is a valid number of players
@@ -112,101 +164,91 @@ public class CluedoVisualGame extends GUI {
     /**
      *
      *
-     * @return
+     *
      */
-    public int leftAction() {
+    private void leftAction() {
         Position oldPos = b.getPositions()[p.getPosition().getRow()][p.getPosition().getCol()];
         if (b.isMoveValid("LEFT", p)) {
             Position newPos = b.getPositions()[p.getPosition().getRow()][p.getPosition().getCol() - 1];
             b.move(oldPos, newPos, p);
-            return 1;
         } else {
-            return 999;
+            numMovesLeft++;
         }
     }
 
     /**
      *
      *
-     * @return
+     *
      */
-    public int rightAction() {
+    private void rightAction() {
         Position oldPos = b.getPositions()[p.getPosition().getRow()][p.getPosition().getCol()];
         if (b.isMoveValid("RIGHT", p)) {
             Position newPos = b.getPositions()[p.getPosition().getRow()][p.getPosition().getCol() + 1];
             b.move(oldPos, newPos, p);
-            return 1;
         } else {
-            return 999;
+            numMovesLeft++;
         }
     }
 
     /**
      *
      *
-     * @return
+     *
      */
-    public int upAction() {
+    private void upAction() {
         Position oldPos = b.getPositions()[p.getPosition().getRow()][p.getPosition().getCol()];
         if (b.isMoveValid("UP", p)) {
             Position newPos = b.getPositions()[p.getPosition().getRow() - 1][p.getPosition().getCol()];
             b.move(oldPos, newPos, p);
-            return 1;
         } else {
-            return 999;
+            numMovesLeft++;
         }
     }
 
     /**
      *
      *
-     * @return
+     *
      */
-    public int downAction() {
+    private void downAction() {
         Position oldPos = b.getPositions()[p.getPosition().getRow()][p.getPosition().getCol()];
         if (b.isMoveValid("DOWN", p)) {
             Position newPos = b.getPositions()[p.getPosition().getRow() + 1][p.getPosition().getCol()];
             b.move(oldPos, newPos, p);
-            return 1;
         } else {
-            return 999;
+            numMovesLeft++;
         }
     }
 
     /**
      *
      *
-     * @return
+     *
      */
-    public int exitAction() {
+    private void exitAction() {
         if (p.isInRoom()) {
             Position oldPos = b.getPositions()[p.getPosition().getRow()][p.getPosition().getCol()];
             if (b.isMoveValid("EXIT", p)) {
                 Position newPos = p.getRoom().getDoors().get(0);
-                System.out.println(oldPos);
-                System.out.println(newPos);
                 b.move(oldPos, newPos, p);
-                return 1;
             } else {
-                return 999;
+                numMovesLeft++;
             }
-        } else {
-            return 999;
         }
     }
 
     /**
      *
      *
-     * @return
+     *
      */
-    public int suggestionAction() {
+    private void suggestionAction() {
         if (p.isInRoom()) {
-            String suggestion = JOptionPane.showInputDialog("List the Player and Weapon you are suggesting were part of the murder with no spaces e.g. (mrswhite dagger)");
-            String[] suggestionArray = suggestion.split(" ");
-            String characterAccusation = suggestionArray[0];
+            System.out.println(p.getHand());
+            String characterAccusation = JOptionPane.showInputDialog("What character are you suggesting committed the murder? (no spaces e.g. mrswhite)").toUpperCase();
+            String weaponAccusation = JOptionPane.showInputDialog("And with what weapon are you suggesting the murder was committed with? (no spaces e.g. leadpipe)").toUpperCase();
             String roomAccusation = p.getRoom().toString().toUpperCase();
-            String weaponAccusation = suggestionArray[1];
             boolean provenWrong = false;
             for (int i = 0; i < numPlayers; i++) {
                 if (b.getPlayers().get(i).toString().equals(p.toString())) continue;
@@ -224,37 +266,27 @@ public class CluedoVisualGame extends GUI {
                     JOptionPane.showMessageDialog(null, b.getPlayers().get(i).toString() + " doesn't have any of these cards");
             }
             if (!provenWrong) JOptionPane.showMessageDialog(null, "No players have cards of your suggestion");
-            System.out.println();
-            return END_TURN;
-        } else {
-            return 999;
+            numMovesLeft = 0;
         }
     }
 
     /**
      *
      *
-     * @return
+     *
      */
-    public int accusationAction() {
-        if (p.isInRoom()) {
-            String suggestion = JOptionPane.showInputDialog("List the Player, Weapon and Room you are Accusing were part of the murder with no spaces in the names e.g. (mrswhite diningroom dagger)");
-            String[] suggestionArray = suggestion.split(" ");
-            String characterAccusation = suggestionArray[0];
-            String roomAccusation = suggestionArray[1];
-            String weaponAccusation = suggestionArray[2];
-            if (characterAccusation.equals(solution.get(0).name().toUpperCase()) && // if character is correct
-                    roomAccusation.equals(solution.get(1).name().toUpperCase()) && // if room is correct
-                    weaponAccusation.equals(solution.get(2).name().toUpperCase())) { // if weapon is correct
-                foundSolution = true;
-                JOptionPane.showMessageDialog(null, p.getName() + " was correct!");
-            } else {
-                p.setIsOutOfGame(true);
-                JOptionPane.showMessageDialog(null, "Unfortunately your accusation was incorrect and you (" + p.getName() + ") are now out of the game");
-            }
-            return END_TURN;
+    private void accusationAction() {
+        String characterAccusation = JOptionPane.showInputDialog("What character are you accusing? (no spaces e.g. mrswhite)").toUpperCase();
+        String roomAccusation = JOptionPane.showInputDialog("Which room are you accusing? (no spaces e.g. diningroom)").toUpperCase();
+        String weaponAccusation = JOptionPane.showInputDialog("And what weapon are you accusing? (no spaces e.g. leadpipe)").toUpperCase();
+        if (characterAccusation.equals(solution.get(0).name().toUpperCase()) && // if character is correct
+                roomAccusation.equals(solution.get(1).name().toUpperCase()) && // if room is correct
+                weaponAccusation.equals(solution.get(2).name().toUpperCase())) { // if weapon is correct
+            foundSolution = true;
+            JOptionPane.showMessageDialog(null, p.getName() + " was correct!");
         } else {
-            return 999;
+            p.setIsOutOfGame(true);
+            JOptionPane.showMessageDialog(null, "Unfortunately your accusation was incorrect and you (" + p.getName() + ") are now out of the game");
         }
     }
 

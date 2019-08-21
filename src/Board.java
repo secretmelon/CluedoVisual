@@ -81,7 +81,6 @@ public class Board {
                     char[] currentLine = s.nextLine().toCharArray();
                     for (int j = 0; j < currentLine.length; j++) {
                         positions[i][j] = new Position(i, j, currentLine[j], null);
-                        System.out.println("hihi");
                     }
                 }
                 return;
@@ -384,6 +383,7 @@ public class Board {
                         item.setPosition(newPosInRoom);
                         item.setInRoom(true);
                         item.setRoom(r);
+                        System.out.println(r.toString());
                     }
                 }
             }

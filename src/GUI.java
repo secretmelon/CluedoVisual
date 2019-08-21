@@ -10,21 +10,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.io.File;
+import java.io.IOException;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.text.DefaultCaret;
 
@@ -56,7 +44,7 @@ public abstract class GUI {
      * Is called when the drawing area is redrawn and performs all the logic for
      * the actual drawing, which is done with the passed Graphics object.
      */
-    protected abstract void redraw(Graphics g);
+    protected abstract void redraw(Graphics g) throws IOException;
 
 
     /**
@@ -65,12 +53,7 @@ public abstract class GUI {
      */
     protected abstract void onMove(String move);
 
-    /**
-     * @return the JTextArea at the bottom of the screen for output.
-     */
-    public JTextArea getTextOutputArea() {
-        return textOutputArea;
-    }
+
 
     /**
      * @return the dimensions of the drawing area.
@@ -94,9 +77,8 @@ public abstract class GUI {
     // assignment up to and including completion.
     // --------------------------------------------------------------------
 
-    private static final int DEFAULT_DRAWING_HEIGHT = 768;
-    private static final int DEFAULT_DRAWING_WIDTH = 800;
-    private static final int TEXT_OUTPUT_ROWS = 5;
+    private static final int DEFAULT_DRAWING_HEIGHT = 900;
+    private static final int DEFAULT_DRAWING_WIDTH = 768;
 
     /*
      * In Swing, everything is a component; buttons, graphics panes, tool tips,
@@ -135,12 +117,18 @@ public abstract class GUI {
         // anonymous class, covered in SWEN221. these are useful when working
         // with swing. the quit button isn't really necessary, as you can just
         // press the frame's close button, but it serves as a nice example.
-        JButton quit = new JButton("Quit");
+
+        //Creating the Menu Bar
+        JMenuBar mb = new JMenuBar();
+        JMenu x = new JMenu("Options");
+        JMenuItem quit = new JMenuItem("Quit Game");
         quit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 System.exit(0); // cleanly end the program.
             }
         });
+        x.add(quit);
+        mb.add(x);
 
         JButton Accusation = new JButton("Accusation");
         Accusation.addActionListener(new ActionListener() {
@@ -151,7 +139,7 @@ public abstract class GUI {
         });
 
         JButton Suggestion = new JButton("Suggestion");
-        Accusation.addActionListener(new ActionListener() {
+        Suggestion.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 onMove("SUGGESTION");
                 redraw();
@@ -159,9 +147,17 @@ public abstract class GUI {
         });
 
         JButton ExitRoom = new JButton("Exit Room");
-        Accusation.addActionListener(new ActionListener() {
+        ExitRoom.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 onMove("EXIT");
+                redraw();
+            }
+        });
+
+        JButton EndTurn = new JButton("End Turn");
+        EndTurn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                onMove("END");
                 redraw();
             }
         });
@@ -223,16 +219,16 @@ public abstract class GUI {
         buttonPanel.setLayout(new GridLayout(2, 1));
         // manually set a fixed size for the panel containing the Accusation and quit
         // buttons (doesn't change with window resize).
-        buttonPanel.setMaximumSize(new Dimension(50, 100));
-        buttonPanel.add(Accusation);
-        buttonPanel.add(quit);
+        buttonPanel.setMaximumSize(new Dimension(100, 100));
+        buttonPanel.add(ExitRoom);
+        buttonPanel.add(EndTurn);
         controls.add(buttonPanel);
         // rigid areas are invisible components that can be used to space
         // components out.
         controls.add(Box.createRigidArea(new Dimension(15, 0)));
 
         JPanel navigation = new JPanel();
-        navigation.setMaximumSize(new Dimension(150, 60));
+        navigation.setMaximumSize(new Dimension(300, 60));
         navigation.setLayout(new GridLayout(2, 3));
         navigation.add(Suggestion);
         navigation.add(north);
@@ -253,7 +249,11 @@ public abstract class GUI {
 
         drawing = new JComponent() {
             protected void paintComponent(Graphics g) {
-                redraw(g);
+                try {
+                    redraw(g);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         };
         drawing.setPreferredSize(new Dimension(DEFAULT_DRAWING_WIDTH,
@@ -268,15 +268,7 @@ public abstract class GUI {
          * JScrollPane to get scroll bars when necessary.
          */
 
-        textOutputArea = new JTextArea(TEXT_OUTPUT_ROWS, 0);
-        textOutputArea.setLineWrap(true);
-        textOutputArea.setWrapStyleWord(true); // pretty line wrap.
-        textOutputArea.setEditable(false);
-        JScrollPane scroll = new JScrollPane(textOutputArea);
-        // these two lines make the JScrollPane always scroll to the bottom when
-        // text is appended to the JTextArea.
-        DefaultCaret caret = (DefaultCaret) textOutputArea.getCaret();
-        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+
 
         /*
          * finally, make the outer JFrame and put it all together. this is more
@@ -293,15 +285,15 @@ public abstract class GUI {
         // the top, remove it.
         split.setBorder(BorderFactory.createEmptyBorder());
         split.setTopComponent(drawing);
-        split.setBottomComponent(scroll);
 
-        frame = new JFrame("Mapper");
+        frame = new JFrame("Cluedo Game");
         // this makes the program actually quit when the frame's close button is
         // pressed.
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.add(controls, BorderLayout.NORTH);
         frame.add(split, BorderLayout.CENTER);
+        frame.setJMenuBar(mb);
 
         // always do these two things last, in this order.
         frame.pack();
