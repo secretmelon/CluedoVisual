@@ -8,14 +8,9 @@
   <component name="ChangeListManager">
     <list default="true" id="0feefeae-f73d-423e-bb40-218cdd908615" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/board.txt" beforeDir="false" afterPath="$PROJECT_DIR$/board.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/CluedoFinal/Board$Cards.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CluedoFinal/Board$Cards.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/CluedoFinal/Board.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CluedoFinal/Board.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/CluedoFinal/CluedoTextGame.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CluedoFinal/CluedoTextGame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CluedoGUI.form" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CluedoGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CluedoVisualGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CluedoTextGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CluedoTextGame.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -332,7 +327,14 @@
       <option name="project" value="LOCAL" />
       <updated>1566275105814</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="board just started working">
+      <created>1566379880449</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1566379880449</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -456,7 +458,8 @@
     <MESSAGE value="Final commit of text based Cluedo" />
     <MESSAGE value="Very Unfinished Code (about to be fleshed out)" />
     <MESSAGE value="all written in but currently in the wrong location" />
-    <option name="LAST_COMMIT_MESSAGE" value="all written in but currently in the wrong location" />
+    <MESSAGE value="board just started working" />
+    <option name="LAST_COMMIT_MESSAGE" value="board just started working" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/../Uni/2019/Tri 1/SWEN221/ChessView/src/swen221/tests/ChessViewTests.java" />
