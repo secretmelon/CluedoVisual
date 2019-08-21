@@ -52,7 +52,7 @@ public class Board {
      * All the cards in the game.
      */
     enum Cards {MrsWhite, MrGreen, MrsPeacock, ColMustard, ProfPlum, MissScarlett,                   // first 6 are characters
-        Ballroom, Conservatory, BillardRoom, Library, Study, Hall, Lounge, DiningRoom, Kitchen,      // second 9 are rooms
+        Ballroom, Conservatory, BilliardRoom, Library, Study, Hall, Lounge, DiningRoom, Kitchen,      // second 9 are rooms
         Candlestick, Dagger, LeadPipe, Revolver, Rope, Spanner}                                      // last 6 are weapons
 
     /**
@@ -62,6 +62,8 @@ public class Board {
      * @param fileName
      */
     public Board(int numPlayers, ArrayList<Cards> solution, String fileName) throws IOException {
+
+
 
         /*--------------------------------*/
         /*         CREATING BOARD         */
@@ -73,6 +75,17 @@ public class Board {
         int allocatedCharacters = 0;
         makeAllCards();
         try {
+            if (fileName.equals("backboard.txt")) {
+                s = new Scanner(new FileReader(fileName));
+                for (int i = 0; s.hasNextLine(); i++) {
+                    char[] currentLine = s.nextLine().toCharArray();
+                    for (int j = 0; j < currentLine.length; j++) {
+                        positions[i][j] = new Position(i, j, currentLine[j], null);
+                        System.out.println("hihi");
+                    }
+                }
+                return;
+            }
             /*--------------------------------*/
             /*        CREATING PLAYERS        */
             /*--------------------------------*/

@@ -1,5 +1,5 @@
-#########6####5#########
-KKKKKK#---BBBB---#CCCCCC
+KKKKKK###6BBBB5###CCCCCC
+KkkkkK#---BbbB---#CccccC
 KkkkkK--BBBbbBBB--CccccC
 KkkkkK--BbbbbbbB--CccccC
 KkkkkK--BbbbbbbB--cccccC
@@ -17,9 +17,9 @@ DDDDDDdD--#####--LLllllL
 #---------#####--llllllL
 3----------------LLllllL
 #--------HHhhHH---LLLLL#
-GGGGGGg--HhhhhH--------2
-GgggggG--Hhhhhh--------#
-GgggggG--HhhhhH--sSSSSSS
+GGGGGGG--HhhhhH--------2
+Ggggggg--Hhhhhh--------#
+GgggggG--HhhhhH--SsSSSSS
 GgggggG--HhhhhH--SsssssS
 GgggggG--HhhhhH--SsssssS
 GGGGGG#1#HHHHHH#-#SSSSSS

@@ -19,6 +19,7 @@ public class CluedoVisualGame extends GUI {
     private static final int END_TURN = 12;
     private int numPlayers;
     private Board b;
+    private Board backBoard;
     private Player p;
     private int numMovesLeft;
 
@@ -34,6 +35,7 @@ public class CluedoVisualGame extends GUI {
 
     public void gameLoop() {
         try {
+            backBoard = new Board(numPlayers, solution, "backboard.txt"); // creates the back board
             b = new Board(numPlayers, solution, "board.txt"); // creates a new board
             board = true;
             /*--------------------------------
@@ -80,6 +82,7 @@ public class CluedoVisualGame extends GUI {
     @Override
     protected void redraw(Graphics g) {
         if (!board)return;
+        backBoard.printBoard(g);
         b.printBoard(g);
     }
 

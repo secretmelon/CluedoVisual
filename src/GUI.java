@@ -234,7 +234,9 @@ public abstract class GUI {
         JPanel navigation = new JPanel();
         navigation.setMaximumSize(new Dimension(150, 60));
         navigation.setLayout(new GridLayout(2, 3));
+        navigation.add(Suggestion);
         navigation.add(north);
+        navigation.add(Accusation);
         navigation.add(west);
         navigation.add(south);
         navigation.add(east);
