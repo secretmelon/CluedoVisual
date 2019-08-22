@@ -107,7 +107,12 @@ public class CluedoVisualGame extends GUI {
         int col = point.x/32;
         if (b.getPositions()[row][col].getItem() != null) {
             return b.getPositions()[row][col].getItem().toString();
-        }// else if (b.getPositions()[row][col])
+        }
+        for (int i = 0; i < b.getRooms().size(); i++) {
+            if (b.getPositions()[row][col].getCharValue() == b.getRooms().get(i).getLetter().toString().charAt(0)) {
+                return b.getRooms().get(i).toString();
+            }
+        }
 
         return "";
 
