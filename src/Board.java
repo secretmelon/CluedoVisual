@@ -200,7 +200,9 @@ public class Board {
 
 
     /**
-     * prints out an ASCII representation of what the board currently looks like
+     * prints out the board on the graphics panel
+     *
+     * @param g - graphics panel
      */
     public void printBoard(Graphics g) {
         for (int j = 0; j < ROWS; j++) {

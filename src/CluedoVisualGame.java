@@ -1,10 +1,6 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -21,26 +17,34 @@ public class CluedoVisualGame extends GUI {
     private boolean foundSolution = false;
     private static final int END_TURN = 12;
     private int numPlayers;
+    private int numFailedPlayer = 0;
     private Board b;
     private Board backBoard;
     private Player p;
     private int numMovesLeft;
+    private boolean board = false;
 
-
-    public CluedoVisualGame() throws IOException {
+    /**
+     * constructor that initialises the GUI, number of players, solution and then runs the game loop
+     *
+     * @throws IOException
+     */
+    private CluedoVisualGame() throws IOException {
+        super();
         setNumPlayers(); // sets the number of the players in the game
         setSolution(); // randomly sets solution for the game
-        System.out.println(solution);
         gameLoop();
     }
 
-    private boolean board = false;
-
-    public void gameLoop() {
+    /**
+     * the main game loop, loops through the players then through the number of moves for each player
+     */
+    private void gameLoop() {
         try {
             backBoard = new Board(numPlayers, solution, "backboard.txt"); // creates the back board
             b = new Board(numPlayers, solution, "board.txt"); // creates a new board
             board = true;
+
             /*--------------------------------
                      MAIN GAME LOOP
             --------------------------------*/
@@ -48,21 +52,18 @@ public class CluedoVisualGame extends GUI {
             for (int player = 0; player < numPlayers; player++) {
                 p = b.getPlayers().get(player);
                 if (p.isOutOfGame()) continue;
-                System.out.println();
+                if (numFailedPlayer == numPlayers-1) break;
 
                 //Rolling dice
                 int movesLeft = diceRoll(12, 2);
                 JOptionPane.showMessageDialog(null, p.getName() + "'s " + "(Player " + (b.getPlayers().indexOf(p) + 1) + ")");
                 numMovesLeft = movesLeft;
-                System.out.println(movesLeft);
                 //Iterates through every move that is left.
                 boolean bool = true;
                 while(numMovesLeft > 0){
                     redraw();
                     //Player enters room
-                    //System.out.println(numMovesLeft);
                     if (p.isInRoom() && bool) {
-                        System.out.println(p.getRoom());
                         JOptionPane.showMessageDialog(null, "You are in the " + p.getRoom().toString());
                         bool = false;
                     }
@@ -74,6 +75,8 @@ public class CluedoVisualGame extends GUI {
                 }
                 //Check to see if game has been won
                 if (foundSolution) break;
+                System.out.println(numPlayers);
+
 
                 //Turn has ended, moving to next player
                 JOptionPane.showMessageDialog(null, p.getName() + "'s turn has ended, Next players turn.");
@@ -90,6 +93,13 @@ public class CluedoVisualGame extends GUI {
         }
     }
 
+    /**
+     * draws the entire graphics pane including board, cards and the number of moves
+     * you have left
+     *
+     * @param g - graphics panel
+     * @throws IOException
+     */
     @Override
     protected void redraw(Graphics g) throws IOException {
         g.setColor(Color.darkGray);
@@ -104,6 +114,12 @@ public class CluedoVisualGame extends GUI {
         printCards(g);
     }
 
+    /**
+     * draws the cards to the graphics pane
+     *
+     * @param g - graphics panel
+     * @throws IOException - in case the file isn't there
+     */
     private void printCards(Graphics g) throws IOException {
         ArrayList<Board.Cards> hand = p.getHand();
         for (int i = 0; i < p.getHand().size(); i++) {
@@ -113,45 +129,40 @@ public class CluedoVisualGame extends GUI {
 
     }
 
+    /**
+     * based on what button you press it will take you to the relevant method move either
+     * move ur character or another option
+     *
+     * @param move - string representing a move
+     */
     @Override
     protected void onMove(String move) {
         if (move.equals("SUGGESTION")) {
             suggestionAction();
-        }
-        else if (move.equals("ACCUSATION")) {
+        } else if (move.equals("ACCUSATION")) {
             accusationAction();
-        }
-        else if (move.equals("EXIT")) {
+        } else if (move.equals("EXIT")) {
             exitAction();
             numMovesLeft--;
-            System.out.println(numMovesLeft);
         } else if (move.equals("END")) {
             numMovesLeft = 0;
         } else if (move.equals("LEFT")) {
             leftAction();
             numMovesLeft--;
-            System.out.println(numMovesLeft);
-        }
-        else if (move.equals("RIGHT")) {
+        } else if (move.equals("RIGHT")) {
             rightAction();
             numMovesLeft--;
-            System.out.println(numMovesLeft);
-        }
-        else if (move.equals("UP")) {
+        } else if (move.equals("UP")) {
             upAction();
             numMovesLeft--;
-            System.out.println(numMovesLeft);
-        }
-        else if (move.equals("DOWN")) {
+        } else if (move.equals("DOWN")) {
             downAction();
             numMovesLeft--;
-            System.out.println(numMovesLeft);
         }
     }
 
     /**
-     *
-     *
+     * creates a pop up to ask the player how many players there will be for this game
      */
     private void setNumPlayers() {
         String numPlayersString = JOptionPane.showInputDialog("How many players? (3-6)");
@@ -162,9 +173,7 @@ public class CluedoVisualGame extends GUI {
 
 
     /**
-     *
-     *
-     *
+     * moves the player left if it is a valid move
      */
     private void leftAction() {
         Position oldPos = b.getPositions()[p.getPosition().getRow()][p.getPosition().getCol()];
@@ -177,9 +186,7 @@ public class CluedoVisualGame extends GUI {
     }
 
     /**
-     *
-     *
-     *
+     * moves the player right if its a valid move
      */
     private void rightAction() {
         Position oldPos = b.getPositions()[p.getPosition().getRow()][p.getPosition().getCol()];
@@ -192,9 +199,7 @@ public class CluedoVisualGame extends GUI {
     }
 
     /**
-     *
-     *
-     *
+     * moves the player up if its a valid move
      */
     private void upAction() {
         Position oldPos = b.getPositions()[p.getPosition().getRow()][p.getPosition().getCol()];
@@ -207,9 +212,7 @@ public class CluedoVisualGame extends GUI {
     }
 
     /**
-     *
-     *
-     *
+     * moves the player down if its a valid move
      */
     private void downAction() {
         Position oldPos = b.getPositions()[p.getPosition().getRow()][p.getPosition().getCol()];
@@ -222,9 +225,7 @@ public class CluedoVisualGame extends GUI {
     }
 
     /**
-     *
-     *
-     *
+     * exits the player out of a room it its a valid move
      */
     private void exitAction() {
         if (p.isInRoom()) {
@@ -239,13 +240,11 @@ public class CluedoVisualGame extends GUI {
     }
 
     /**
-     *
-     *
-     *
+     * lets the player make a suggestion on what the murder weapon and
+     * character is if they are aloud to do so
      */
     private void suggestionAction() {
         if (p.isInRoom()) {
-            System.out.println(p.getHand());
             String characterAccusation = JOptionPane.showInputDialog("What character are you suggesting committed the murder? (no spaces e.g. mrswhite)").toUpperCase();
             String weaponAccusation = JOptionPane.showInputDialog("And with what weapon are you suggesting the murder was committed with? (no spaces e.g. leadpipe)").toUpperCase();
             String roomAccusation = p.getRoom().toString().toUpperCase();
@@ -271,9 +270,8 @@ public class CluedoVisualGame extends GUI {
     }
 
     /**
-     *
-     *
-     *
+     * lets the player make an accusation on what the murder weapon, room and
+     * character is if they are aloud to do so
      */
     private void accusationAction() {
         String characterAccusation = JOptionPane.showInputDialog("What character are you accusing? (no spaces e.g. mrswhite)").toUpperCase();
@@ -286,6 +284,7 @@ public class CluedoVisualGame extends GUI {
             JOptionPane.showMessageDialog(null, p.getName() + " was correct!");
         } else {
             p.setIsOutOfGame(true);
+            numFailedPlayer++;
             JOptionPane.showMessageDialog(null, "Unfortunately your accusation was incorrect and you (" + p.getName() + ") are now out of the game");
         }
     }
