@@ -132,10 +132,12 @@ public class CluedoVisualGame extends GUI {
         b.printBoard(g);
         //add in dice pic
         g.setColor(Color.cyan);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
         g.drawString(Integer.toString(numMovesLeft), 100, (25*32)+65);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
         g.drawString(p.toString()+"'s turn", 580, 23);
+        BufferedImage MovesLeft = ImageIO.read(new File("Images\\MovesLeft.png"));
+        g.drawImage(MovesLeft, 30, (25*32)+30, null);
         printCards(g);
     }
 

@@ -48,6 +48,7 @@ public class Board {
     private final BufferedImage WallIcon = ImageIO.read(new File("Images\\Wall.png"));
     private final BufferedImage MrsWhiteIcon = ImageIO.read(new File("Images\\White.png"));
 
+
     /**
      * All the cards in the game.
      */
