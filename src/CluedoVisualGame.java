@@ -103,14 +103,14 @@ public class CluedoVisualGame extends GUI {
      */
     @Override
     protected String getItemName(Point point) {
-        int row = point.y / 32;
-        int col = point.x / 32;
+        int row = point.y / 23;
+        int col = point.x / 23;
         if (b.getPositions()[row][col].getItem() != null) {
-            return "This is:  "+b.getPositions()[row][col].getItem().toString();
+            return b.getPositions()[row][col].getItem().toString();
         }
         for (int i = 0; i < b.getRooms().size(); i++) {
             if (b.getPositions()[row][col].getCharValue() == b.getRooms().get(i).getLetter().toString().charAt(0)) {
-                return "This is:  "+b.getRooms().get(i).toString();
+                return b.getRooms().get(i).toString();
             }
         }
         return "";
@@ -132,12 +132,12 @@ public class CluedoVisualGame extends GUI {
         b.printBoard(g);
         //add in dice pic
         g.setColor(Color.cyan);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
-        g.drawString(Integer.toString(numMovesLeft), 100, (25*32)+65);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-        g.drawString(p.toString()+"'s turn", 580, 23);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 35));
+        g.drawString(Integer.toString(numMovesLeft), 85, (25*23)+65);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
+        g.drawString(p.toString()+"'s turn", 420, 18);
         BufferedImage MovesLeft = ImageIO.read(new File("Images\\MovesLeft.png"));
-        g.drawImage(MovesLeft, 30, (25*32)+30, null);
+        g.drawImage(MovesLeft, 10, (25*23)+30, null);
         printCards(g);
     }
 
@@ -151,7 +151,7 @@ public class CluedoVisualGame extends GUI {
         ArrayList<Board.Cards> hand = p.getHand();
         for (int i = 0; i < p.getHand().size(); i++) {
             BufferedImage card = ImageIO.read(new File("Images\\Cards\\" + p.getHand().get(i) + ".png"));
-            g.drawImage(card, (200+((70*i) + 10)), (25*32)+10, null);
+            g.drawImage(card, (130+((70*i) + 10)), (25*23)+10, null);
         }
 
     }

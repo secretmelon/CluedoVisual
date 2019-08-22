@@ -26,7 +26,7 @@ public class Board {
     private int numPlayers; // the number of players
 
     private final BufferedImage BallroomIcon = ImageIO.read(new File("Images\\Ball.png"));
-    private final BufferedImage BilliardIcon = ImageIO.read(new File("Images\\Billiard.png"));
+    private final BufferedImage BilliardIcon = ImageIO.read(new File("Images\\Billiard .png"));
     private final BufferedImage CandleStickIcon = ImageIO.read(new File("Images\\Candle Stick.png"));
     private final BufferedImage ConservatoryIcon = ImageIO.read(new File("Images\\Conservatory.png"));
     private final BufferedImage DaggerIcon = ImageIO.read(new File("Images\\Dagger.png"));
@@ -210,41 +210,41 @@ public class Board {
             for (int i = 0; i < COLUMNS; i++) {
                 char c = positions[j][i].getCharValue();
 
-                if (c == '#') g.drawImage(WallIcon, i*32, j*32, null);
-                else if (c == '-') g.drawImage(MainFloorIcon, i*32, j*32, null);
-                else if (c == '1') g.drawImage(MissScarlettIcon, i*32, j*32, null);
-                else if (c == '2') g.drawImage(ProfPlumIcon, i*32, j*32, null);
-                else if (c == '3') g.drawImage(ColMustardIcon, i*32, j*32, null);
-                else if (c == '4') g.drawImage(MrsPeacockIcon, i*32, j*32, null);
-                else if (c == '5') g.drawImage(MrGreenIcon, i*32, j*32, null);
-                else if (c == '6') g.drawImage(MrsWhiteIcon, i*32, j*32, null);
+                if (c == '#') g.drawImage(WallIcon, i*23, j*23, null);
+                else if (c == '-') g.drawImage(MainFloorIcon, i*23, j*23, null);
+                else if (c == '1') g.drawImage(MissScarlettIcon, i*23, j*23, null);
+                else if (c == '2') g.drawImage(ProfPlumIcon, i*23, j*23, null);
+                else if (c == '3') g.drawImage(ColMustardIcon, i*23, j*23, null);
+                else if (c == '4') g.drawImage(MrsPeacockIcon, i*23, j*23, null);
+                else if (c == '5') g.drawImage(MrGreenIcon, i*23, j*23, null);
+                else if (c == '6') g.drawImage(MrsWhiteIcon, i*23, j*23, null);
 
-                else if (c == 'B') g.drawImage(WallIcon, i*32, j*32, null);
-                else if (c == 'b') g.drawImage(BallroomIcon, i*32, j*32, null);
-                else if (c == 'C') g.drawImage(WallIcon, i*32, j*32, null);
-                else if (c == 'c') g.drawImage(ConservatoryIcon, i*32, j*32, null);
-                else if (c == 'I') g.drawImage(WallIcon, i*32, j*32, null);
-                else if (c == 'i') g.drawImage(BilliardIcon, i*32, j*32, null);
-                else if (c == 'L') g.drawImage(WallIcon, i*32, j*32, null);
-                else if (c == 'l') g.drawImage(LibraryIcon, i*32, j*32, null);
-                else if (c == 'S') g.drawImage(WallIcon, i*32, j*32, null);
-                else if (c == 's') g.drawImage(StudyIcon, i*32, j*32, null);
-                else if (c == 'H') g.drawImage(WallIcon, i*32, j*32, null);
-                else if (c == 'h') g.drawImage(HallIcon, i*32, j*32, null);
-                else if (c == 'G') g.drawImage(WallIcon, i*32, j*32, null);
-                else if (c == 'g') g.drawImage(StudyIcon, i*32, j*32, null);
-                else if (c == 'D') g.drawImage(WallIcon, i*32, j*32, null);
-                else if (c == 'd') g.drawImage(DiningRoomIcon, i*32, j*32, null);
-                else if (c == 'K') g.drawImage(WallIcon, i*32, j*32, null);
-                else if (c == 'k') g.drawImage(KitchenIcon, i*32, j*32, null);
-                else if (c == 'k') g.drawImage(KitchenIcon, i*32, j*32, null);
+                else if (c == 'B') g.drawImage(WallIcon, i*23, j*23, null);
+                else if (c == 'b') g.drawImage(BallroomIcon, i*23, j*23, null);
+                else if (c == 'C') g.drawImage(WallIcon, i*23, j*23, null);
+                else if (c == 'c') g.drawImage(ConservatoryIcon, i*23, j*23, null);
+                else if (c == 'I') g.drawImage(WallIcon, i*23, j*23, null);
+                else if (c == 'i') g.drawImage(BilliardIcon, i*23, j*23, null);
+                else if (c == 'L') g.drawImage(WallIcon, i*23, j*23, null);
+                else if (c == 'l') g.drawImage(LibraryIcon, i*23, j*23, null);
+                else if (c == 'S') g.drawImage(WallIcon, i*23, j*23, null);
+                else if (c == 's') g.drawImage(StudyIcon, i*23, j*23, null);
+                else if (c == 'H') g.drawImage(WallIcon, i*23, j*23, null);
+                else if (c == 'h') g.drawImage(HallIcon, i*23, j*23, null);
+                else if (c == 'G') g.drawImage(WallIcon, i*23, j*23, null);
+                else if (c == 'g') g.drawImage(StudyIcon, i*23, j*23, null);
+                else if (c == 'D') g.drawImage(WallIcon, i*23, j*23, null);
+                else if (c == 'd') g.drawImage(DiningRoomIcon, i*23, j*23, null);
+                else if (c == 'K') g.drawImage(WallIcon, i*23, j*23, null);
+                else if (c == 'k') g.drawImage(KitchenIcon, i*23, j*23, null);
+                else if (c == 'k') g.drawImage(KitchenIcon, i*23, j*23, null);
 
-                else if (c == '|') g.drawImage(CandleStickIcon, i*32, j*32, null);
-                else if (c == '+') g.drawImage(DaggerIcon, i*32, j*32, null);
-                else if (c == '!') g.drawImage(LeadpipeIcon, i*32, j*32, null);
-                else if (c == '*') g.drawImage(RevolverIcon, i*32, j*32, null);
-                else if (c == '%') g.drawImage(RopeIcon, i*32, j*32, null);
-                else if (c == '^') g.drawImage(SpannerIcon, i*32, j*32, null);
+                else if (c == '|') g.drawImage(CandleStickIcon, i*23, j*23, null);
+                else if (c == '+') g.drawImage(DaggerIcon, i*23, j*23, null);
+                else if (c == '!') g.drawImage(LeadpipeIcon, i*23, j*23, null);
+                else if (c == '*') g.drawImage(RevolverIcon, i*23, j*23, null);
+                else if (c == '%') g.drawImage(RopeIcon, i*23, j*23, null);
+                else if (c == '^') g.drawImage(SpannerIcon, i*23, j*23, null);
             }
         }
     }

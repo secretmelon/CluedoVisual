@@ -49,8 +49,8 @@ public abstract class GUI implements KeyListener{
         frame.repaint();
     }
 
-    private static final int DEFAULT_DRAWING_HEIGHT = 900; // graphics panel height
-    private static final int DEFAULT_DRAWING_WIDTH = 768; // graphics panel width
+    private static final int DEFAULT_DRAWING_HEIGHT = 680; // graphics panel height
+    private static final int DEFAULT_DRAWING_WIDTH = 600; // graphics panel width
     private JFrame frame;
 
     /**
@@ -69,7 +69,7 @@ public abstract class GUI implements KeyListener{
          // first, we make the buttons etc. that go along the top bar and also the menu bar.
 
         // Creates a text box for inputs if the user prefers to type in there actions
-        JTextField jt = new JTextField(21);
+        JTextField jt = new JTextField(10);
         jt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -78,7 +78,7 @@ public abstract class GUI implements KeyListener{
                 redraw();
             }
         });
-        JLabel textFieldLabel = new JLabel("Write Action:");
+        JLabel textFieldLabel = new JLabel("Action:");
 
         // Creating the Menu Bar
         JMenuBar mb = new JMenuBar();
