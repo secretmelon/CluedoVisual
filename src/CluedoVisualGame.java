@@ -23,6 +23,7 @@ public class CluedoVisualGame extends GUI {
     private Player p;
     private int numMovesLeft;
     private boolean board = false;
+    private int currentPlayer;
 
     /**
      * constructor that initialises the GUI, number of players, solution and then runs the game loop
@@ -50,6 +51,7 @@ public class CluedoVisualGame extends GUI {
             --------------------------------*/
 
             for (int player = 0; player < numPlayers; player++) {
+                currentPlayer = player;
                 p = b.getPlayers().get(player);
                 if (p.isOutOfGame()) continue;
                 if (numFailedPlayer == numPlayers-1) break;
@@ -91,6 +93,24 @@ public class CluedoVisualGame extends GUI {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * gets the string of the item that your clicking on
+     *
+     * @param point - location of the click
+     * @return - name of the item
+     */
+    @Override
+    protected String getItemName(Point point) {
+        int row = point.y/32;
+        int col = point.x/32;
+        if (b.getPositions()[row][col].getItem() != null) {
+            return b.getPositions()[row][col].getItem().toString();
+        }// else if (b.getPositions()[row][col])
+
+        return "";
+
     }
 
     /**
@@ -145,7 +165,7 @@ public class CluedoVisualGame extends GUI {
             exitAction();
             numMovesLeft--;
         } else if (move.equals("END")) {
-            numMovesLeft = 0;
+            if (p.isInRoom()) numMovesLeft = 0; // can only end turn if they are in a room
         } else if (move.equals("LEFT")) {
             leftAction();
             numMovesLeft--;

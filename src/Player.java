@@ -170,6 +170,7 @@ public class Player implements Item{
      * @return - string representing the players name
      */
     @Override public String toString() {
+        if (name.equals("null")) return "";
         return name.toString();
     }
 }

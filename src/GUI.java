@@ -1,9 +1,5 @@
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.IOException;
 
 import javax.swing.*;
@@ -21,6 +17,14 @@ import javax.swing.border.Border;
  * @author @author Joshua Richards 300402562 | Melina Ariyani 300407485
  */
 public abstract class GUI {
+
+    /**
+     * returns the name of the item that the user is clicking on
+     *
+     * @param point - place that the user is clicking
+     * @return - the name of the item
+     */
+    protected abstract String getItemName(Point point);
 
     /**
      * Is called when the drawing area is redrawn and performs all the logic for
@@ -47,7 +51,6 @@ public abstract class GUI {
 
     private static final int DEFAULT_DRAWING_HEIGHT = 900; // graphics panel height
     private static final int DEFAULT_DRAWING_WIDTH = 768; // graphics panel width
-
     private JFrame frame;
 
     /**
@@ -64,6 +67,18 @@ public abstract class GUI {
         JPanel controls;
         JComponent drawing; // we customise this to make it a drawing pane.
          // first, we make the buttons etc. that go along the top bar and also the menu bar.
+
+        // Creates a text box for inputs if the user prefers to type in there actions
+        JTextField jt = new JTextField(21);
+        jt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onMove(jt.getText().toUpperCase());
+                jt.setText("");
+                redraw();
+            }
+        });
+        JLabel textFieldLabel = new JLabel("Write Action:");
 
         // Creating the Menu Bar
         JMenuBar mb = new JMenuBar();
@@ -155,10 +170,10 @@ public abstract class GUI {
         controls = new JPanel();
         controls.setLayout(new BoxLayout(controls, BoxLayout.LINE_AXIS));
 
-        // make an empty border so the components aren't right up against the
-        // frame edge.
+        // make an empty border so the components aren't right up against the frame edge.
         Border edge = BorderFactory.createEmptyBorder(5, 5, 5, 5);
         controls.setBorder(edge);
+
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(2, 1));
@@ -182,8 +197,20 @@ public abstract class GUI {
         optionsPanel.add(west);
         optionsPanel.add(south);
         optionsPanel.add(east);
+
+        // creates the text box and also what item you click on will be displayed here
+        JPanel textFieldPanel = new JPanel();
+        textFieldLabel.setLayout(new GridLayout(2, 1));
+        textFieldPanel.add(textFieldLabel, BorderLayout.NORTH);
+        textFieldPanel.add(jt);
+
         controls.add(optionsPanel);
         controls.add(Box.createRigidArea(new Dimension(15, 0)));
+
+
+        // clicking output panel
+        JPanel clickingOutput = new JPanel();
+        JLabel clickingLabel = new JLabel();
 
          // making the drawing canvas
         drawing = new JComponent() {
@@ -195,29 +222,37 @@ public abstract class GUI {
                 }
             }
         };
+        // listens to the location that the mouse is clicked at
+        drawing.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                clickingLabel.setText(getItemName(e.getPoint()));
+            }
+        });
         drawing.setPreferredSize(new Dimension(DEFAULT_DRAWING_WIDTH,
                 DEFAULT_DRAWING_HEIGHT));
         drawing.setVisible(true);
+
+        // adding the clicked on item to the textFieldPanel
+        clickingOutput.add(clickingLabel);
+        textFieldPanel.add(clickingOutput);
+        controls.add(textFieldPanel);
 
         JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         split.setDividerSize(5); // make the selectable area smaller
         split.setContinuousLayout(true); // make the panes resize nicely
         split.setResizeWeight(1); // always give extra space to drawings
-        // JSplitPanes have a default border that makes an ugly row of pixels at
-        // the top, remove it.
         split.setBorder(BorderFactory.createEmptyBorder());
         split.setTopComponent(drawing);
 
         frame = new JFrame("Cluedo Game");
-        // this makes the program actually quit when the frame's close button is
-        // pressed.
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.add(controls, BorderLayout.NORTH);
         frame.add(split, BorderLayout.CENTER);
         frame.setJMenuBar(mb);
 
-        // always do these two things last, in this order.
         frame.pack();
         frame.setVisible(true);
     }
