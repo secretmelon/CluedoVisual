@@ -16,7 +16,7 @@ import javax.swing.border.Border;
  *
  * @author @author Joshua Richards 300402562 | Melina Ariyani 300407485
  */
-public abstract class GUI {
+public abstract class GUI implements KeyListener{
 
     /**
      * returns the name of the item that the user is clicking on
@@ -166,6 +166,8 @@ public abstract class GUI {
 
 
 
+
+
         // Next, make the top bar itself and arrange everything inside of it.
         controls = new JPanel();
         controls.setLayout(new BoxLayout(controls, BoxLayout.LINE_AXIS));
@@ -237,6 +239,7 @@ public abstract class GUI {
         // adding the clicked on item to the textFieldPanel
         clickingOutput.add(clickingLabel);
         textFieldPanel.add(clickingOutput);
+
         controls.add(textFieldPanel);
 
         JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
@@ -249,6 +252,7 @@ public abstract class GUI {
         frame = new JFrame("Cluedo Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
+        frame.addKeyListener(this);
         frame.add(controls, BorderLayout.NORTH);
         frame.add(split, BorderLayout.CENTER);
         frame.setJMenuBar(mb);
@@ -256,4 +260,39 @@ public abstract class GUI {
         frame.pack();
         frame.setVisible(true);
     }
+
+    /**
+     * what actions happen when an arrow key is pressed
+     *
+     * @param e - the key that is pressed
+     */
+    @Override
+    public void keyPressed(KeyEvent e) {
+        System.out.println("in key pressed");
+        int keyCode = e.getKeyCode();
+        switch( keyCode ) {
+            case KeyEvent.VK_UP:
+                onMove("UP");
+                redraw();
+                break;
+            case KeyEvent.VK_DOWN:
+                onMove("DOWN");
+                redraw();
+                break;
+            case KeyEvent.VK_LEFT:
+                onMove("LEFT");
+                redraw();
+                break;
+            case KeyEvent.VK_RIGHT :
+                onMove("RIGHT");
+                redraw();
+                break;
+        }
+    }
+
+    @Override public void keyTyped(KeyEvent e) { }
+    @Override public void keyReleased(KeyEvent e) {
+
+    }
+
 }

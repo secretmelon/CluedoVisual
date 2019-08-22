@@ -103,19 +103,17 @@ public class CluedoVisualGame extends GUI {
      */
     @Override
     protected String getItemName(Point point) {
-        int row = point.y/32;
-        int col = point.x/32;
+        int row = point.y / 32;
+        int col = point.x / 32;
         if (b.getPositions()[row][col].getItem() != null) {
-            return b.getPositions()[row][col].getItem().toString();
+            return "This is:  "+b.getPositions()[row][col].getItem().toString();
         }
         for (int i = 0; i < b.getRooms().size(); i++) {
             if (b.getPositions()[row][col].getCharValue() == b.getRooms().get(i).getLetter().toString().charAt(0)) {
-                return b.getRooms().get(i).toString();
+                return "This is:  "+b.getRooms().get(i).toString();
             }
         }
-
         return "";
-
     }
 
     /**
@@ -136,6 +134,8 @@ public class CluedoVisualGame extends GUI {
         g.setColor(Color.cyan);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
         g.drawString(Integer.toString(numMovesLeft), 100, (25*32)+65);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+        g.drawString(p.toString()+"'s turn", 580, 23);
         printCards(g);
     }
 
@@ -168,7 +168,7 @@ public class CluedoVisualGame extends GUI {
             accusationAction();
         } else if (move.equals("EXIT")) {
             exitAction();
-            numMovesLeft--;
+            if(p.isInRoom())numMovesLeft--;
         } else if (move.equals("END")) {
             if (p.isInRoom()) numMovesLeft = 0; // can only end turn if they are in a room
         } else if (move.equals("LEFT")) {
