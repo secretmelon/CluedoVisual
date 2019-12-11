@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="CluedoFinal:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/CluedoFinal_jar</output-path>
+    <root id="archive" name="CluedoFinal.jar">
+      <element id="module-output" name="CluedoFinal" />
+      <element id="library" level="module" name="JUnit5.2" module-name="CluedoFinal" />
+    </root>
+  </artifact>
+</component>

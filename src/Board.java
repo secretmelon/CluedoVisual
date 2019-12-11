@@ -245,6 +245,7 @@ public class Board {
                 else if (c == '*') g.drawImage(RevolverIcon, i*23, j*23, null);
                 else if (c == '%') g.drawImage(RopeIcon, i*23, j*23, null);
                 else if (c == '^') g.drawImage(SpannerIcon, i*23, j*23, null);
+                System.out.println("hi");
             }
         }
     }
